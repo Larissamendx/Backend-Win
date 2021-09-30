@@ -1,0 +1,10 @@
+{
+    "type": "mysql",
+    "host": "162.214.104.23",
+    "port": 3306,
+    "username": "ciclowin_test",
+    "password": "teste2021*",
+    "database": "ciclowin_winapp",
+    "synchronize": false,
+    "entities": ["dist/**/*.entity.js"]
+  }
