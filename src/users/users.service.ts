@@ -5,6 +5,7 @@ import { Repository, getRepository } from 'typeorm';
 import { CreateUsersDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Users } from './entities/users.entity';
+const datauri = require('datauri')
 
 
 @Injectable()
@@ -29,6 +30,8 @@ export class UsersService {
       }
     
     let users = new Users()
+    const image = await datauri(data.img)
+    // const doc_front = await datauri(data.doc_front)
     users.email = data.email
     users.name = data.name
     users.password = data.password
@@ -36,7 +39,7 @@ export class UsersService {
     users.rg = data.rg
     users.access = data.access
     users.token = data.token
-    users.img = data.img
+    users.img = image
     users.tag = data.tag
     users.gender = data.gender
     users.created = data.created
@@ -89,7 +92,7 @@ export class UsersService {
   //   return newUser;
   // }
 
-  async update(id: number, data: UpdateUserDto): Promise<Users> {
+  async update(id: string, data: UpdateUserDto): Promise<Users> {
     let toUpdate = await this.usersRepository.findOne(id);
 
     let updated = Object.assign(toUpdate, data);

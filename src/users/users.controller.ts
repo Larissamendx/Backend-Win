@@ -1,17 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-user.dto';
 import { ResultadoDto } from 'src/dto/resultado.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateUserDto } from './dto/update-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // @Post('create')
+  // async create(@Body() createUserDto: CreateUsersDto): Promise<ResultadoDto> {
+  //   return this.usersService.create(createUserDto);
+  // }
+
   @Post('create')
-  async create(@Body() createUserDto: CreateUsersDto): Promise<ResultadoDto> {
-    return this.usersService.create(createUserDto);
+  @UseInterceptors(FileInterceptor('img'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
+
 
   @Get()
   findAll() {
@@ -23,10 +32,10 @@ export class UsersController {
     return this.usersService.findOne(uid);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
+  @Patch(':uid')
+  update(@Param('uid') uid: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(uid, updateUserDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

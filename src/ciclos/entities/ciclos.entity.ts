@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { CicloFiles } from 'src/ciclo-files/entities/ciclo-file.entity';
 
 @Entity()
 export class Ciclos {
@@ -9,7 +10,7 @@ export class Ciclos {
     name: string;
 
     @Column()
-    description: string;
+    desc: string;
 
     @Column()
     ticker: string;

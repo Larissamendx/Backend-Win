@@ -43,7 +43,7 @@ async create(data: CreateCicloDto): Promise<ResultadoDto>{
   let ciclos = new Ciclos()
     ciclos.percentage = data.percentage
     ciclos.name = data.name 
-    ciclos.description = data.description
+    ciclos.desc = data.desc
     ciclos.ticker  = data.ticker
     ciclos.price_unity  = data.price_unity
     ciclos.unity = data.unity
