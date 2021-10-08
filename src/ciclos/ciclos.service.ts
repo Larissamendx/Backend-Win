@@ -12,20 +12,11 @@ export class CiclosService {
     @InjectRepository(Ciclos)
     private ciclosRepository: Repository<Ciclos>,
   ) {}
-   
 
-//   const ciclosExists = this.ciclos.find((user) => ciclos.name === name);
 
-//   if (ciclosExists) {
-//     return 'Esse ciclo ja existe';
-//   }
-
-//   this.ciclos.push(ciclos);
-
-//   return ciclos;
-// }
-
+//Criar um novo ciclo
 async create(data: CreateCicloDto): Promise<ResultadoDto>{
+  //Verificar se já tem um nome ou ticker 
   const {name, ticker } = data;
   const qb = await getRepository(Ciclos)
     .createQueryBuilder('ciclos')
@@ -63,6 +54,8 @@ async create(data: CreateCicloDto): Promise<ResultadoDto>{
     ciclos.buy_qtd_min = data.buy_qtd_min
     ciclos.buy_qtd_max = data.buy_qtd_max
     ciclos.public = data.public
+
+    //Salva no DB
     return this.ciclosRepository.save(ciclos)
     .then((result) => {
       console.log(ciclos)
@@ -81,29 +74,17 @@ async create(data: CreateCicloDto): Promise<ResultadoDto>{
     })    
 }
 
-
+//Retornar todos os ciclos
 findAll(): Promise<Ciclos[]> {
   return this.ciclosRepository.find();
 }
 
+//Retornar o ciclo pelo id
 findOne(id: string): Promise<Ciclos> {
   return this.ciclosRepository.findOne(id);
 }
 
-// update(id: number,  UpdateCicloDto: UpdateCicloDto) {
-//   const ciclo = this.ciclosRepository.findOne(id);
-
-//   const newCiclo: Ciclos = {
-//     ...ciclo,
-//     ...UpdateCicloDto,
-//   };
-  
-//   const findIndex = this.ciclosRepository.findIndex((ciclo) => Number(ciclo.uid) === id);
-//   this.ciclosRepository[findIndex] = newCiclo;
-
-//   return ciclo;
-// }
-
+//Atualizar informações do ciclo no db
 async update(id: number, data: UpdateCicloDto): Promise<Ciclos> {
   let toUpdate = await this.ciclosRepository.findOne(id);
 
@@ -111,6 +92,7 @@ async update(id: number, data: UpdateCicloDto): Promise<Ciclos> {
   return await this.ciclosRepository.save(updated);
 }
 
+//Remover ciclo no db
 async remove(id: string): Promise<void> {
   await this.ciclosRepository.delete(id);
 }

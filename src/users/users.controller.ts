@@ -10,17 +10,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @Post('create')
-  // async create(@Body() createUserDto: CreateUsersDto): Promise<ResultadoDto> {
-  //   return this.usersService.create(createUserDto);
-  // }
-
   @Post('create')
-  @UseInterceptors(FileInterceptor('img'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  async create(@Body() createUserDto: CreateUsersDto): Promise<ResultadoDto> {
+    return this.usersService.create(createUserDto);
   }
-
 
   @Get()
   findAll() {

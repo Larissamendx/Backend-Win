@@ -14,9 +14,11 @@ export class UsersService {
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
   ) {}
+  
 
+  //Cria novo usuário
   async create(data: CreateUsersDto): Promise<ResultadoDto>{
-      // check uniqueness of username/email
+      // Verifica se já tem o email cadastrado
       const {email} = data;
       const qb = await getRepository(Users)
         .createQueryBuilder('users')
@@ -30,8 +32,6 @@ export class UsersService {
       }
     
     let users = new Users()
-    const image = await datauri(data.img)
-    // const doc_front = await datauri(data.doc_front)
     users.email = data.email
     users.name = data.name
     users.password = data.password
@@ -39,7 +39,7 @@ export class UsersService {
     users.rg = data.rg
     users.access = data.access
     users.token = data.token
-    users.img = image
+    users.img = data.img
     users.tag = data.tag
     users.gender = data.gender
     users.created = data.created
@@ -51,6 +51,7 @@ export class UsersService {
     users.doc_back = data.doc_back
     users.doc_rendimento = data.doc_rendimento
     
+    //Salva no repositório
     return this.usersRepository.save(users)
     .then((result) => {
       console.log(users)
@@ -69,29 +70,17 @@ export class UsersService {
     })    
   }
   
-
+  //Retornar todos os usuários
   findAll(): Promise<Users[]> {
     return this.usersRepository.find();
   }
 
+  //Retornar usuário pelo seu id
   findOne(id: string): Promise<Users> {
     return this.usersRepository.findOne(id);
   }
 
-  // update(id: string, updateUserDto: UpdateUserDto) {
-  //   const user = this.usersRepository.findOne(id);
-    
-  //   const newUser: Users = {
-  //     ...user,
-  //     ...updateUserDto,
-  //   };
-    
-  //   const findIndex = this.usersRepository.findIndex((user) => user.uid === id);
-  //   this.users[findIndex] = newUser;
-
-  //   return newUser;
-  // }
-
+  //Atualizar informações usuário
   async update(id: string, data: UpdateUserDto): Promise<Users> {
     let toUpdate = await this.usersRepository.findOne(id);
 
@@ -99,7 +88,7 @@ export class UsersService {
     return await this.usersRepository.save(updated);
   }
 
-
+  //Remover usuário do db
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
